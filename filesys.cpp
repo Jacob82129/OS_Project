@@ -40,19 +40,19 @@ int Filesys::buildfs()
     // 2 + fatsize is first datablock
 
     fat.push_back(2 + fatsize);
-    fat.push_back(-1);
+    fat.push_back(-1); // -1 since next entry is reserved for ROOT
 
     for(int i = 0; i < fatsize; i++)
     {
-        fat.push_back(-1);
+        fat.push_back(-1); // allocating the blocks for FAT
     }
 
     for(int i = 2 + fatsize; i < getnumberofblocks(); i++)
     {
-        fat.push_back(i+1);
+        fat.push_back(i+1); // initializes the available spots for next open blocks
     }
 
-    fat[fat.size() - 1] = 0; // not sure of change
+    fat[fat.size() - 1] = 0; // signifies the end of useable blocks
 
     return 0;
 }
@@ -74,7 +74,7 @@ int Filesys::fssynch()
         outstream2 << fat[i] << " ";
     }
 
-    string buffer1 = outstream1.str();
+    string buffer1 = outstream1.str(); //buffer1 and buffer2 now contain FAT data
     string buffer2 = outstream2.str();
 
     //cout << buffer1 << " " << buffer2 << endl;
@@ -102,13 +102,6 @@ int Filesys::readfs()
     rootsize = getblocksize()/13;
     fatsize = (getnumberofblocks() * 4 / getblocksize()) + 1;
 
-
-     //string buffer1, buffer2;
-     //getblock(1, buffer1);
-     
-
-     
-
      istringstream instream1;
      
      string buffer;
@@ -123,13 +116,6 @@ int Filesys::readfs()
          filename.push_back(f);
          firstblock.push_back(b);
      }
-     
-     //instream1.str(buffer1);
-     //instream2.str(buffer2);
-
-     //filename.clear();
-     //firstblock.clear();
-
      
 
      cout << "FAT is being read..." << endl;
@@ -278,8 +264,8 @@ int Filesys::addblock(string file, string block)
         fat[blockid] = allocate;
     }
 
-    fat[0] = fat[fat[0]];
-    fat[allocate] = 0;
+    fat[0] = fat[fat[0]]; // updates free list
+    fat[allocate] = 0;// updates FAT
     fssynch();
 
     //string buffer;

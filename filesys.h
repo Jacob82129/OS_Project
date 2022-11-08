@@ -20,19 +20,20 @@ class Filesys: public Sdisk
         int writeblock(string file, int blocknumber, string buffer);// write block to the disk
         int nextblock(string file, int blocknumber);// uses getsfirstblock(), then reads the next block
         
+        //Experimental Function(s)
         void printfileName();
 
 
     protected:
         
-        int rootsize;
-        int fatsize;
-        vector<string> filename;
-        vector<int> firstblock;
+        int rootsize;   //maximum number of entries in ROOT
+        int fatsize;    // number of blocks occupied by FAT
+        vector<string> filename;    //file names in ROOT
+        vector<int> firstblock;     //firstblocks in ROOT
         vector<int> fat;
         int buildfs();
         int readfs();
-        int fssynch();
+        int fssynch(); //updates the ROOT and FAT to sdisk
         bool fbcheck(string file, int blocknumber);
 };
 #endif

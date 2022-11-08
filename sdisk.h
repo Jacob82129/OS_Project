@@ -13,9 +13,9 @@ class Sdisk
 {
     public:
         Sdisk();
-        Sdisk(string diskname, int numberofblocks, int blocksize);
-        int getblock(int blocknumber, string& buffer);
-        int putblock(int blocknumber, string buffer);
+        Sdisk(string diskname, int numberofblocks, int blocksize); //creates the sdisk with the following parameters
+        int getblock(int blocknumber, string& buffer);  // gets blocknumber from disk, then stores to buffer
+        int putblock(int blocknumber, string buffer);   // writes buffer into blocknumber
         int getnumberofblocks(); // accessor function
         int getblocksize(); // accessor function
 
