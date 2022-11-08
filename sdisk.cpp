@@ -15,65 +15,65 @@ Sdisk::Sdisk(string diskname, int numberofblocks, int blocksize)
     this -> blocksize = blocksize;
 
     //check if diskname exits
-    ifstream indisk;
-    indisk.open(diskname.c_str());
+    fstream indisk;
+    indisk.open(this -> diskname.c_str(), ios::in);
+
     if(indisk.fail())
     {
-        indisk.close();
-        ofstream outdisk;
-        outdisk.open(diskname.c_str());
         
-        for(int i = 0; i < numberofblocks*blocksize; i++) // while(blocksize == numberofblocks)
-        {
-            
-            outdisk.put('#');
-        }
-    }
-    
-    else
-    {
-        ifstream infile;
-        infile.open(diskname.c_str());
-        int counter = 0;
-        
-        char c;
-        infile.get(c);
+        indisk.open(this -> diskname.c_str(), ios::out);
 
-        while(infile.good())
+        if(indisk.fail())
         {
-            counter++;
-            infile.get(c);
+            return;
         }
-        //write blocksize * numberofblocks to diskname
-        if(counter == numberofblocks * blocksize)
-            cout << "Disk size is correct" << endl;
+        else
+        {
+            for(int i = 0; i < this -> numberofblocks*this -> blocksize; i++) 
+            {
+            
+                indisk.put('#');
+            }   
+        }
+        
     }
+
+    indisk.close();
+    
+    
 };
 
 int Sdisk::putblock(int blocknumber, string buffer)
 {
-        ofstream iofile;
-        iofile.open(diskname.c_str());
+        fstream iofile(this -> diskname.c_str(), ios::in | ios::out);
+        
+        if(iofile.fail())
+        {
+            return 0;
+        }
+
         if(blocknumber < 0 || blocknumber >= numberofblocks)
         {
             cout << "Block doesn't exist" << endl;
             return 0;
         }
 
-        iofile.seekp(blocksize * blocknumber);
+        iofile.seekp(this -> blocksize * blocknumber);
 
-        for(int i=0; i < blocksize; i++)
+        for(int i=0; i < buffer.length() && i < this -> blocksize; i++)
         {
             iofile.put(buffer[i]);
         }
+
+        iofile.close();
 
         return 1;
 }
 
 int Sdisk::getblock(int blocknumber, string& buffer)
 {
-    ifstream iofile;
-    iofile.open(diskname.c_str());
+    fstream iofile;
+    iofile.open(this -> diskname.c_str(), ios::in);
 
     if(blocknumber < 0 || blocknumber >= numberofblocks)
     {
@@ -81,25 +81,27 @@ int Sdisk::getblock(int blocknumber, string& buffer)
         return 0;
     }
 
-    iofile.seekg(blocknumber * blocksize);
+    iofile.seekg(blocknumber * this -> blocksize);
     buffer.clear();
     char c;
 
-    for(int i = 0; i < blocksize; i++)
+    for(int i = 0; i < this -> blocksize; i++)
     {
         iofile.get(c);
         buffer.push_back(c);
     }
+
+    iofile.close();
 
     return 1;
 }
 
 int Sdisk::getnumberofblocks()
 {
-    return numberofblocks;
+    return this -> numberofblocks;
 }
 
 int Sdisk::getblocksize()
 {
-    return blocksize;
+    return this -> blocksize;
 }

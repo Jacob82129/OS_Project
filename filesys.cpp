@@ -77,7 +77,7 @@ int Filesys::fssynch()
     string buffer1 = outstream1.str();
     string buffer2 = outstream2.str();
 
-    cout << buffer1 << " " << buffer2 << endl;
+    //cout << buffer1 << " " << buffer2 << endl;
 
     // do some blocking
     vector<string> blocks1 = block(buffer1, getblocksize());
@@ -96,24 +96,23 @@ int Filesys::fssynch()
 
 int Filesys::readfs()
 {
-     string buffer1, buffer2;
-     getblock(1, buffer1);
 
-     for(int i = 0; i < fatsize;i++)
-     {
-         string b;
-         getblock(i+2,b);
-         buffer2 += b;
-     }
+    cout << "Root is being read..." << endl;
+
+    rootsize = getblocksize()/13;
+    fatsize = (getnumberofblocks() * 4 / getblocksize()) + 1;
+
+
+     //string buffer1, buffer2;
+     //getblock(1, buffer1);
+     
+
+     
 
      istringstream instream1;
-     istringstream instream2;
      
-     instream1.str(buffer1);
-     instream1.str(buffer2);
-
-     filename.clear();
-     firstblock.clear();
+     string buffer;
+     instream1.str(buffer);
 
      for(int i = 0; i < rootsize;i++)
      {
@@ -124,6 +123,28 @@ int Filesys::readfs()
          filename.push_back(f);
          firstblock.push_back(b);
      }
+     
+     //instream1.str(buffer1);
+     //instream2.str(buffer2);
+
+     //filename.clear();
+     //firstblock.clear();
+
+     
+
+     cout << "FAT is being read..." << endl;
+
+     istringstream instream2;
+     buffer.clear();
+
+     for(int i = 0; i < fatsize;i++)
+     {
+         string b;
+         getblock(i+2,b);
+         buffer += b;
+     }
+
+     instream2.str(buffer);
 
      // lets get the FAT
      for(int i = 0; i < getnumberofblocks(); i++)
@@ -133,7 +154,10 @@ int Filesys::readfs()
          fat.push_back(k);
      }
 
+     cout << "Disk has been read. ROOT and FAT have been created" << endl;
+
      return 1;
+     
 
 }
 
@@ -221,7 +245,7 @@ int Filesys::addblock(string file, string block)
     int allocate = fat[0];
     if(allocate <= 0)
     {
-        cout << "No space on disk" << endl;
+        cout << "No space on disk" << endl; 
         return 0; // 0 indicates failure
     }
 
