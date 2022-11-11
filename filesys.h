@@ -19,6 +19,8 @@ class Filesys: public Sdisk
         int readblock(string file, int blocknumber, string& buffer);
         int writeblock(string file, int blocknumber, string buffer);// write block to the disk
         int nextblock(string file, int blocknumber);// uses getsfirstblock(), then reads the next block
+
+        vector<string> ls();
         
         //Experimental Function(s)
         void printfileName();
