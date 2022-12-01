@@ -5,13 +5,26 @@
 
 using namespace std;
 
+Shell::Shell()
+{
+
+}
+
 Shell::Shell(string filename, int numberofblocks, int blocksize)
 {
-    
+    this -> filename = filename;
+    this -> numberofblocks = numberofblocks;
+    this -> blocksize = blocksize;
 }
 
 int Shell::dir()
 {
+    vector<string> flist = ls();
+
+    for(int i = 0; i < flist.size(); i++)
+    {
+        cout << flist[i] << endl;
+    }
      
     return 0;
 }

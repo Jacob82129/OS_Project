@@ -52,7 +52,7 @@ int Filesys::buildfs()
         fat.push_back(i+1); // initializes the available spots for next open blocks
     }
 
-    fat[fat.size() - 1] = 0; // signifies the end of useable blocks
+    fat[fat.size() - 1] = 0; // signifies the end of useable blocks, end of freelist, try putting -1 instead of 0
 
     return 0;
 }
@@ -389,4 +389,17 @@ void Filesys::printfileName()
 
     }
     cout << endl;
+}
+
+vector<string> Filesys::ls()
+{
+    vector<string> flist;
+
+    for(int i = 0; i < filename.size(); i++)
+    {
+        if(filename[i] != "XXXXX")
+        {
+            flist.push_back(filename[i]);
+        }
+    }
 }
