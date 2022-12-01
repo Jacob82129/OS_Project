@@ -402,4 +402,6 @@ vector<string> Filesys::ls()
             flist.push_back(filename[i]);
         }
     }
+
+    return flist;
 }

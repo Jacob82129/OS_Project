@@ -9,15 +9,15 @@
 class Table: public Filesys
 {
     public:
-
-    Table(string diskname, int numberofblocks, int blocksize, string flatfile, string indexfile);
-    int build_Table(string input_file);
-    int search(string value);
+        Table();
+        Table(string diskname, int numberofblocks, int blocksize, string flatfile, string indexfile);
+        int build_Table(string input_file);
+        int search(string value);
 
     private:
-    string flatfile;
-    string indexfile;
-    int indexSearch(string value);
+        string flatfile;
+        string indexfile;
+        int indexSearch(string value);
 
 
 };

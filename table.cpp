@@ -4,11 +4,22 @@
 #include "block.h"
 
 using namespace std;
+/*
+Table::Table():Filesys(diskname, numberofblocks, blocksize)
+{
+    //default constructor
+}
+*/
+
 
 Table::Table(string diskname, int numberofblocks, int blocksize, string flatfile, string indexfile): Filesys(diskname, numberofblocks, blocksize)
 {
+    newfile(flatfile);
     this -> flatfile = flatfile;
+
+    newfile(indexfile);
     this -> indexfile = indexfile;
+    cout << "Table has been created" << endl;
 }
 
 int Table:: build_Table(string inputfile)

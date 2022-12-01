@@ -10,7 +10,6 @@ using namespace std;
 class Shell: public Filesys
 {
     public:
-        Shell();
         Shell(string filename, int numberofblocks, int blocksize);
         int dir();
         int add(string file, string buffer);
