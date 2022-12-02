@@ -5,14 +5,14 @@
 
 using namespace std;
 
-Filesys::Filesys(string diskname, int numberofblocks, int blocksize)
+Filesys::Filesys(string diskname, int numberofblocks, int blocksize) : Sdisk(diskname, numberofblocks, blocksize)
 {
     this -> diskname = diskname;
     this -> numberofblocks = numberofblocks;
     this -> blocksize = blocksize;
 
    rootsize = getblocksize() / 12;
-   fatsize = (getnumberofblocks() * 5) / getblocksize() + 1;
+   fatsize = ((getnumberofblocks() * 5)) / getblocksize() + 1;
 
    string buffer;
    getblock(1, buffer);
@@ -87,7 +87,7 @@ int Filesys::fssynch()
 
     for(int i = 0; i < blocks2.size();i++)
     {
-        putblock(fatsize + 2 + i, blocks2[i]);
+        putblock(2 + i, blocks2[i]);
     }
 
     return 1;
@@ -97,50 +97,40 @@ int Filesys::fssynch()
 int Filesys::readfs()
 {
 
-    cout << "Root is being read..." << endl;
-
-    rootsize = getblocksize()/13;
-    fatsize = (getnumberofblocks() * 4 / getblocksize()) + 1;
-
-     istringstream instream1;
-     
-     string buffer;
-     instream1.str(buffer);
-
-     for(int i = 0; i < rootsize;i++)
-     {
-         string f;
-         int b;
-         
-         instream1 >> f >> b;
-         filename.push_back(f);
-         firstblock.push_back(b);
-     }
-     
-
-     cout << "FAT is being read..." << endl;
-
-     istringstream instream2;
-     buffer.clear();
+    string buffer1, buffer2;
+    getblock(1, buffer1);
 
      for(int i = 0; i < fatsize;i++)
      {
          string b;
          getblock(i+2,b);
-         buffer += b;
+         buffer2 += b;
      }
 
-     instream2.str(buffer);
+    istringstream instream1;
+    istringstream instream2;
 
-     // lets get the FAT
-     for(int i = 0; i < getnumberofblocks(); i++)
-     {
-         int k;
-         instream2 >> k;
-         fat.push_back(k);
-     }
+    instream1.str(buffer1);
+    instream2.str(buffer2);
 
-     cout << "Disk has been read. ROOT and FAT have been created" << endl;
+    filename.clear();
+    firstblock.clear();
+
+    for(int i = 0; i < rootsize; i++)
+    {
+        string f;
+        int b;
+        instream1 >> f >> b;
+        filename.push_back(f);
+        firstblock.push_back(b);
+    }
+
+    for(int i = 0; i < getnumberofblocks(); i++)
+    {
+        int k;
+        instream2 >> k;
+        fat.push_back(k);
+    }
 
      return 1;
      
@@ -397,7 +387,7 @@ vector<string> Filesys::ls()
 
     for(int i = 0; i < filename.size(); i++)
     {
-        if(filename[i] != "XXXXX")
+        if(filename[i] != "XXXXXX")
         {
             flist.push_back(filename[i]);
         }

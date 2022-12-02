@@ -4,12 +4,12 @@
 #include "block.h"
 
 using namespace std;
-/*
+
 Table::Table():Filesys(diskname, numberofblocks, blocksize)
 {
     //default constructor
 }
-*/
+
 
 
 Table::Table(string diskname, int numberofblocks, int blocksize, string flatfile, string indexfile): Filesys(diskname, numberofblocks, blocksize)

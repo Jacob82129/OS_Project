@@ -5,8 +5,13 @@
 
 using namespace std;
 
+Shell::Shell() : Filesys(diskname, numberofblocks, blocksize)
+{
 
-Shell::Shell(string filename, int numberofblocks, int blocksize): Filesys(diskname, numberofblocks, blocksize)
+}
+
+
+Shell::Shell(string diskname, int numberofblocks, int blocksize): Filesys(diskname, numberofblocks, blocksize)
 {
     cout << "Shell has been created" << endl;
 }
@@ -20,15 +25,14 @@ int Shell::dir()
         cout << flist[i] << endl;   //displays contents of flist
     }
      
-    return 1;
+    return 0;
 }
 
 int Shell::add(string file, string buffer)
 {
-    /*
-    string filename;
 
-    int code = newfile(filename);
+
+    int code = newfile(file);
 
     if(code == 1)
     {
@@ -36,15 +40,15 @@ int Shell::add(string file, string buffer)
 
         for(int i = 0; i < blocks.size(); i++)
         {
-            code = addblock(filename, blocks[i]);
+            code = addblock(file, blocks[i]);
             return 1;
         }
     }
     
         return 0;
     
-    */
-
+    
+   /*
     newfile(file);
 
 	for(int i = 0; i < 128; i++)   // blockSize = 128
@@ -69,6 +73,7 @@ int Shell::add(string file, string buffer)
     }
 
     return 1;
+    */
 }
 
 int Shell::del(string file)
@@ -93,7 +98,7 @@ int Shell::type(string file)
     {
         string t;
 
-        int error = readblock(file, block, t);
+        readblock(file, block, t);
         buffer += t;
         block = nextblock(file, block);
     }
@@ -101,52 +106,24 @@ int Shell::type(string file)
     cout << buffer << endl;
     cout << buffer.length() << endl;
 
-    return 1;
+    return 0;
 }
 
 int Shell::copy(string file1, string file2)
-{
-    int code = getfirstblock(file1);
+{   
+   string buffer;
 
-    if(code == -1)
-    {
-        cout << "File Does Not Exist" << endl;
-        return -1;
-    }
+   int block = getfirstblock(file1);
 
-    int code2 = getfirstblock(file2);
-
-    if(code2 != -1)
-    {
-        cout << "File Already Exists" << endl;
-        return -1;
-    }
-
-    int code3 = newfile(file2);
-
-    if(code3 == 0)
-    {
-        cout << "File does not have space for ROOT" << endl;
-        return -1;
-    }
-
-    int point = code; // point variable is the firstblock
-    while(point != 0)
+    while(block > 0)
     {
         string b;
-        readblock(file1, point, b);
-
-        int code4 = addblock(file2, b);
-        if(code4 == -1)
-        {
-            cout << "No Space Left" << endl;
-            del(file2);
-            
-            return -1;
-        }
-
-        point = nextblock(file1, point);
+        readblock(file1, block, b);
+        buffer += b;
+        block = nextblock(file1, block);
     }
 
-    return 1;
+    add(file2, buffer);
+
+    return 0;
 }

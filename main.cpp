@@ -72,12 +72,18 @@ int main()
   //It inputs commands as : command op1 op2
  //You should modify it to work for your implementation.
  //
-  Sdisk sdisk = Sdisk("sdisk.txt", 256, 128);
-  Filesys fsys = Filesys("sdisk.txt", 256, 128);
-  Shell shell = Shell("sdisk.txt", 256, 128);
-  Table table = Table("sdisk.txt", 256, 128, "flatfile", "indexfile");
+ 
+  
+  string name = "disk";
+
+  Table table = Table(name, 256, 128, "flatfile", "indexfile");
 
   table.build_Table("data.txt");
+  
+  Shell shell = Shell(name, 256, 128);
+  
+
+  
  
  string s;
  string command="go";
@@ -129,6 +135,10 @@ while (command != "quit")
             // The variable op1 is the source file and the variable op2 is the destination file.
             shell.copy(op1, op2);
           }
+        if(command == "search")
+        {
+            table.search(op1);
+        }
        
 }
 
