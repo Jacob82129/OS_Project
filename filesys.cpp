@@ -276,7 +276,7 @@ int Filesys::delblock(string file, int blocknumber)
         return 0;
     }
     
-    int b = getfirstblock(file);
+     int b = getfirstblock(file);
 
     if(b == blocknumber)
     {
@@ -292,6 +292,7 @@ int Filesys::delblock(string file, int blocknumber)
     }
     else //not the firstblock
     {
+    
         while(fat[b] != blocknumber)
         {
             b = fat[b];
@@ -302,6 +303,7 @@ int Filesys::delblock(string file, int blocknumber)
 
     fat[blocknumber] = fat[0];
     fat[0] = blocknumber;
+    fssynch();
 
     return 1;
 }

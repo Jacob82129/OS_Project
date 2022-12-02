@@ -14,6 +14,7 @@ Table::Table():Filesys(diskname, numberofblocks, blocksize)
 
 Table::Table(string diskname, int numberofblocks, int blocksize, string flatfile, string indexfile): Filesys(diskname, numberofblocks, blocksize)
 {
+    // inherits Filesys and Sdisk, creates the Table
     newfile(flatfile);
     this -> flatfile = flatfile;
 
@@ -35,7 +36,7 @@ int Table:: build_Table(string inputfile)
     string rec; // process each line in indexfile
     getline(infile, rec);// reads the first line up
 
-    while(infile.good())
+    while(infile.good())    //constructs the table when inputfile is readable
     {
         string date = rec.substr(0, 5);
         vector<string> blocks = block(rec, getblocksize());
@@ -47,7 +48,7 @@ int Table:: build_Table(string inputfile)
     }
     
     outstream << "88888" << 0 << " " << endl;
-    string buffer = outstream.str(); // something missing
+    string buffer = outstream.str(); 
     vector<string> blocks = block(buffer, getblocksize());
 
     for(int i = 0; i < blocks.size(); i++)
@@ -63,13 +64,13 @@ int Table::search(string value)
     int block = indexSearch(value);
     if(block == 0)
     {
-        cout << "Record not found." << endl;
+        cout << "Record not found." << endl; // will not find if block is empty
         return 0;
     }
     else
     {
         string buffer;
-        int error = readblock(flatfile, block, buffer);
+        int error = readblock(flatfile, block, buffer); //store the contents onto buffer
         cout << buffer << endl;
 
         return 1;

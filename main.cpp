@@ -113,31 +113,31 @@ while (command != "quit")
        if (command=="dir")
           {
             // use the ls function
-            shell.dir();
+            shell.dir(); //dir() works!
           }
        if (command=="add")
           {
             // The variable op1 is the new file and op2 is the file data
-            shell.add(op1, op2);
+            shell.add(op1, op2); // add() works!
           }
        if (command=="del")
           {
             // The variable op1 is the file
-            shell.del(op1);
+            shell.del(op1); // del() does not work
           }
        if (command=="type")
           {
             // The variable op1 is the file
-            shell.type(op1);
+            shell.type(op1); // type() works!
           }
        if (command=="copy")
           {
             // The variable op1 is the source file and the variable op2 is the destination file.
-            shell.copy(op1, op2);
+            shell.copy(op1, op2); // copy() does work for the most part, segmentation fault sometimes occurs
           }
         if(command == "search")
         {
-            table.search(op1);
+            table.search(op1); // I believe search() works, only displays a portion of an entry of the data.txt table
         }
        
 }
